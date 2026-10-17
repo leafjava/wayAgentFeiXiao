@@ -47,7 +47,7 @@ export function HomeView({
           <h2 className="text-2xl font-bold text-slate-100 mb-6">项目目录</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {projects.map((p) => (
-              <Link key={p.id} href={`/project/${p.id}`} className="block bg-slate-900/70 border border-slate-800 rounded-2xl p-5 hover:border-indigo-500 transition">
+              <Link key={p.id} href={`/${p.id}`} className="block bg-slate-900/70 border border-slate-800 rounded-2xl p-5 hover:border-indigo-500 transition">
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-slate-100 font-bold text-lg">

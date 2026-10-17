@@ -1,2 +1,5 @@
-export const dynamic = "force-dynamic";
-export { default } from "../../[projectId]/page";
+import { redirect } from "next/navigation";
+
+export default function LegacyProjectRoute({ params }: { params: { projectId: string } }) {
+  redirect(`/${params.projectId}`);
+}
