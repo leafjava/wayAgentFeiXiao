@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createWalletClient, custom, parseEther } from "viem";
 
 type Platform = { id: string; name: string; category: string; supportedActions: string[]; requiresKyc?: boolean; regulator?: string };
 
@@ -13,6 +14,22 @@ export function TrackView() {
   const [platform, setPlatform] = useState("");
   const [amount, setAmount] = useState("");
   const [buyResult, setBuyResult] = useState<any>(null);
+  const [chainBuy, setChainBuy] = useState<any>(null);
+
+  async function buyOnChain() {
+    const ethereum = (window as any).ethereum;
+    const address = process.env.NEXT_PUBLIC_PURCHASE_CONTRACT_ADDRESS;
+    if (!ethereum) return setChainBuy({ error: "请先安装 MetaMask 或兼容 EVM 钱包" });
+    if (!address) return setChainBuy({ error: "尚未配置支付合约地址" });
+    try {
+      const client = createWalletClient({ transport: custom(ethereum) });
+      const [account] = await client.requestAddresses();
+      const chainId = await ethereum.request({ method: "eth_chainId" });
+      if (Number.parseInt(chainId, 16) !== 10143) return setChainBuy({ error: "请先切换到 Monad Testnet（Chain ID 10143）" });
+      const hash = await client.writeContract({ chain: null, address: address as `0x${string}`, abi: [{ name: "purchase", type: "function", stateMutability: "payable", inputs: [{ name: "projectId", type: "string" }, { name: "asset", type: "string" }], outputs: [{ name: "orderId", type: "bytes32" }] }], functionName: "purchase", args: [projectId, projectId === "paxg" ? "PAXG" : "DEMO"], value: parseEther("0.01"), account });
+      setChainBuy({ hash, account, explorer: `https://testnet.monadexplorer.com/tx/${hash}` });
+    } catch (e: any) { setChainBuy({ error: e?.shortMessage || e?.message || String(e) }); }
+  }
 
   async function load() {
     const [p, w, c, e] = await Promise.all([
@@ -128,6 +145,7 @@ export function TrackView() {
             </select>
             <input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="数量 (如 100 EQX)" className="bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100" />
             <button onClick={buy} className="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white">授权并跳转</button>
+            <button onClick={buyOnChain} className="px-3 py-1.5 rounded bg-violet-600 hover:bg-violet-500 text-white">支付 0.01 MON 并记录</button>
           </div>
           {buyResult && (
             <div className="mt-3 bg-emerald-900/20 border border-emerald-800/40 rounded p-3 text-xs">
@@ -142,6 +160,7 @@ export function TrackView() {
               )}
             </div>
           )}
+          {chainBuy && <div className="mt-3 bg-violet-900/20 border border-violet-800/40 rounded p-3 text-xs">{chainBuy.error ? <div className="text-rose-400">{chainBuy.error}</div> : <><div className="text-violet-300 font-semibold">链上支付已提交</div><div className="font-mono break-all text-slate-400">tx: {chainBuy.hash}</div><a className="text-indigo-300" target="_blank" href={chainBuy.explorer}>在 Monad Explorer 查看 →</a></>}</div>}
         </div>
 
         <div className="mt-6 bg-slate-900/70 border border-slate-800 rounded-2xl p-5">

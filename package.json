@@ -12,6 +12,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "contract:compile": "node contracts/compile.mjs",
+    "purchase:compile": "node contracts/compile-purchase.mjs",
+    "purchase:deploy": "npm run purchase:compile && node scripts/deploy-purchase.mjs",
     "chain:deploy": "node scripts/deploy.mjs",
     "test": "vitest run",
     "test:watch": "vitest",

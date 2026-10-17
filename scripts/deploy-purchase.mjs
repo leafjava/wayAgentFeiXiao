@@ -1,0 +1,18 @@
+import { config as loadEnv } from "dotenv";
+import { readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { createWalletClient, createPublicClient, http, defineChain } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+loadEnv(); loadEnv({ path: ".env.local", override: false });
+const root = process.cwd(); const rpc = process.env.MONAD_RPC ?? "https://testnet-rpc.monad.xyz";
+const chain = defineChain({ id: Number(process.env.MONAD_CHAIN_ID ?? 10143), name: "Monad Testnet", nativeCurrency: { name: "MON", symbol: "MON", decimals: 18 }, rpcUrls: { default: { http: [rpc] } }, blockExplorers: { default: { name: "Monad Explorer", url: "https://testnet.monadexplorer.com" } }, testnet: true });
+const pk = process.env.PRIVATE_KEY; if (!pk) throw new Error("PRIVATE_KEY is not set");
+const abi = JSON.parse(readFileSync(join(root, ".chain_runtime", "TokenTruthPurchase.abi.json"), "utf8"));
+const bytecode = "0x" + readFileSync(join(root, ".chain_runtime", "TokenTruthPurchase.bin"), "utf8");
+const account = privateKeyToAccount(("0x" + pk.replace(/^0x/, "")));
+const publicClient = createPublicClient({ chain, transport: http(rpc) }); const wallet = createWalletClient({ account, chain, transport: http(rpc) });
+console.log(`Deploying purchase contract from ${account.address}...`);
+const txHash = await wallet.deployContract({ abi, bytecode }); const receipt = await publicClient.waitForTransactionReceipt({ hash: txHash });
+const address = receipt.contractAddress; if (!address) throw new Error("No contract address in receipt");
+writeFileSync(join(root, ".chain_runtime", "purchase-contract.json"), JSON.stringify({ address, txHash, deployer: account.address, chainId: chain.id, explorer: `${chain.blockExplorers.default.url}/address/${address}` }, null, 2));
+console.log(`TokenTruthPurchase deployed: ${address}`); console.log(`Transaction: ${txHash}`);
