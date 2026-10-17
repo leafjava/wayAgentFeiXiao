@@ -10,7 +10,7 @@ export type EvidenceType =
   | "CONTENT_PUBLISH"
   | "EXECUTION_CONSENT";
 
-export type ProjectCategory = "crypto" | "rwa_stock" | "rwa_bond" | "rwa_fund" | "other";
+export type ProjectCategory = "crypto" | "rwa_stock" | "rwa_bond" | "rwa_fund" | "rwa_commodity" | "other";
 
 export type RiskStatus = "HEALTHY" | "NEEDS_REVIEW" | "HIGH_RISK";
 

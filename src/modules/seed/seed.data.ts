@@ -42,6 +42,45 @@ const DEMO_EQUITYX: ProjectDTO = {
   createdAt: 0,
 };
 
+// Verified public RWA example: Paxos-issued PAX Gold (PAXG).
+const PAXG: ProjectDTO = {
+  id: "paxg",
+  name: "Pax Gold",
+  symbol: "PAXG",
+  sector: "RWA / Tokenized Gold",
+  description: "PAXG is a Paxos-issued ERC-20 token backed 1:1 by one fine troy ounce of London Good Delivery gold held in segregated London vaults.",
+  website: "https://www.paxos.com/pax-gold",
+  whitepaper: "https://www.paxos.com/wp-content/uploads/2019/09/PAX-Gold-Whitepaper.pdf",
+  category: "rwa_commodity",
+  rwaInfo: {
+    underlying_asset: "One fine troy ounce of London Good Delivery gold per PAXG",
+    issuer: "Paxos Trust Company, N.A.",
+    custodian: "Paxos Trust Company; LBMA-accredited London vaults",
+    regulator: "New York Department of Financial Services (Paxos Trust Company)",
+    regulatory_framework: "Paxos PAX Gold Terms and Conditions; AML/KYC applies",
+    representation: "Tokenized ownership interest in allocated gold; not equity in Paxos",
+    dividend_rights: false,
+    redemption_rights: "Redeemable through Paxos for physical gold subject to eligibility, minimums and fees",
+    transferability: "Transferable on Ethereum and supported secondary markets; exchange and jurisdiction restrictions apply",
+    kyc_required: true,
+    accredited_only: false,
+    eligibility: "Paxos account, identity verification and supported jurisdiction required for direct mint/redeem",
+    risks: ["Gold price volatility", "Paxos/custody and redemption risk", "Smart-contract and blockchain risk", "Market liquidity and premium/discount risk", "Regulatory and jurisdiction restrictions"],
+    contract_address: "0x45804880De22913dAFE09f4980848ECE6EcbAf78",
+  },
+  createdAt: 0,
+};
+
+const PAXG_DOCS = [
+  { projectId: "paxg", docType: "product", title: "PAXG Overview", content: "Paxos states that each PAXG represents one fine troy ounce of London Good Delivery gold held in segregated LBMA-accredited vaults. PAXG is divisible, transferable on public blockchains and redeemable through Paxos for physical gold subject to terms.", source: "Paxos Documentation", sourceUrl: "https://docs.paxos.com/guides/stablecoin/paxg", trustLevel: "official" },
+  { projectId: "paxg", docType: "whitepaper", title: "PAX Gold Whitepaper", content: "The whitepaper describes PAXG as an Ethereum ERC-20 token representing fractional ownership of corresponding London Good Delivery gold bars held by Paxos.", source: "Paxos", sourceUrl: "https://www.paxos.com/wp-content/uploads/2019/09/PAX-Gold-Whitepaper.pdf", trustLevel: "official" },
+  { projectId: "paxg", docType: "terms", title: "PAX Gold Terms and Conditions", content: "Paxos terms govern account access, minting, redemption, transfer restrictions, fees, KYC/AML and risk disclosures. PAXG is not equity in Paxos and does not pay dividends.", source: "Paxos Terms", sourceUrl: "https://www.paxos.com/terms-and-conditions", trustLevel: "official" },
+  { projectId: "paxg", docType: "market", title: "Static market snapshot — PAXG/USDT", content: "Snapshot date: 2026-10-17. Reference price: 4152.17 USD; 24h change: +0.82%; 24h volume: 172531972 USD; market cap: 1829493806 USD; circulating supply: 440620 PAXG; total supply: 440620 PAXG. Source: CoinMarketCap snapshot. Binance is a major PAXG/USDT secondary market.", source: "CoinMarketCap / Binance market reference", sourceUrl: "https://coinmarketcap.com/currencies/pax-gold/", trustLevel: "market" },
+  { projectId: "paxg", docType: "redemption", title: "PAXG redemption and minimums", content: "Paxos documentation says PAXG is divisible to 18 decimals. Direct Paxos purchases have a 0.03 PAXG minimum because of the 0.02 PAXG conversion fee; there is no minimum holding amount. Physical redemption is subject to eligibility, fees and operational terms.", source: "Paxos Support", sourceUrl: "https://support.paxos.com/articles/8564225276-PAX-Gold-Minimum-Investment-Amounts", trustLevel: "official" },
+  { projectId: "paxg", docType: "risk", title: "PAXG risk disclosure", content: "Key risks include gold price volatility, crypto-asset liquidity and spread risk, reliance on Paxos and its custodians, smart-contract or blockchain failure, counterparty and regulatory risk, and geographic restrictions.", source: "Paxos General Terms", sourceUrl: "https://www.paxos.com/terms-and-conditions/general-terms-and-conditions", trustLevel: "official" },
+  { projectId: "paxg", docType: "transparency", title: "PAXG transparency reports", content: "Paxos publishes reserve composition and independent attestation reports for PAXG reserves. Users should review the latest report before relying on reserve coverage.", source: "Paxos Documentation", sourceUrl: "https://docs.paxos.com/guides/stablecoin/paxg", trustLevel: "official" },
+];
+
 const DEMO_MON_DOCS = [
   {
     projectId: "demo-mon",
@@ -149,11 +188,9 @@ const DEMO_EQUITYX_DOCS = [
 
 export async function seedAll() {
   const existing = await projectsService.list();
-  if (existing.length > 0) return { skipped: true, count: existing.length };
   const now = Math.floor(Date.now() / 1000);
-  await projectsService.upsert({ ...DEMO_MON, createdAt: now });
-  for (const d of DEMO_MON_DOCS) await projectsService.addDocument(d);
-  await projectsService.upsert({ ...DEMO_EQUITYX, createdAt: now + 1 });
-  for (const d of DEMO_EQUITYX_DOCS) await projectsService.addDocument(d);
-  return { skipped: false, count: 2 };
+  if (!existing.some((p) => p.id === DEMO_MON.id)) { await projectsService.upsert({ ...DEMO_MON, createdAt: now }); for (const d of DEMO_MON_DOCS) await projectsService.addDocument(d); }
+  if (!existing.some((p) => p.id === DEMO_EQUITYX.id)) { await projectsService.upsert({ ...DEMO_EQUITYX, createdAt: now + 1 }); for (const d of DEMO_EQUITYX_DOCS) await projectsService.addDocument(d); }
+  if (!existing.some((p) => p.id === PAXG.id)) { await projectsService.upsert({ ...PAXG, createdAt: now + 2 }); for (const d of PAXG_DOCS) await projectsService.addDocument(d); }
+  return { skipped: false, count: 3 };
 }
