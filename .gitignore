@@ -6,6 +6,11 @@ dist/
 build/
 coverage/
 *.tsbuildinfo
+.npm-cache/
+.npm_cache/
+.pnpm-store/
+.yarn/
+.yarn-cache/
 
 # Env
 .env
@@ -24,19 +29,33 @@ Thumbs.db
 
 # Data
 /data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
 .cache/
 .turbo/
 .parcel-cache/
+.runtime/
+runtime/
+.chain_runtime/
+.pose_runtime/
 
 # Solidity
 artifacts/
 cache/
 typechain-types/
 .openzeppelin/
+*.bin
+*.abi
 
 # Prisma
 prisma/dev.db
 prisma/dev.db-journal
+prisma/data/
+prisma/*.db
+prisma/*.db-journal
 
 # Editors
 .idea/
