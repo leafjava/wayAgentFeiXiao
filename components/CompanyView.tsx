@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -29,16 +31,8 @@ export function CompanyView({ projects, templates, projectId }: { projects: Proj
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-slate-800 bg-slate-900/60">
-        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center gap-4">
-          <a href="/" className="text-slate-100 font-bold">TokenTruth</a>
-          <span className="text-slate-500 text-sm">·</span>
-          <span className="text-slate-300 text-sm">项目方后台</span>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 py-6">
+    <div className="workspace-page">
+<main className="max-w-7xl mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold text-slate-100">项目方后台</h1>
         <p className="text-slate-400 text-sm">辅助生成介绍材料、视频脚本、新闻内容、FAQ。</p>
 
@@ -46,7 +40,7 @@ export function CompanyView({ projects, templates, projectId }: { projects: Proj
           <select value={projectId} onChange={(e) => setProject(e.target.value)} className="bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-sm text-slate-200">
             {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
-          <a href={`/edit?projectId=${projectId}`} className="text-xs text-indigo-300 hover:text-indigo-200">编辑资料 →</a>
+          <Link href={`/edit?projectId=${projectId}`} className="text-xs text-indigo-300 hover:text-indigo-200">编辑资料 →</Link>
         </div>
 
         <div className="mt-4 grid md:grid-cols-2 gap-4">
@@ -78,7 +72,7 @@ export function CompanyView({ projects, templates, projectId }: { projects: Proj
                     <div className="mt-3 bg-indigo-900/20 border border-indigo-800/40 rounded p-2">
                       <div className="text-indigo-300 text-xs font-semibold">✓ 已上链</div>
                       <div className="font-mono text-[10px] text-slate-500 break-all">tx: {result.onChain.txHash}</div>
-                      <a href={`/proof?hash=${result.onChain.evidenceHash}`} className="text-indigo-300 hover:underline text-[10px]">→ 验证</a>
+                      <Link href={`/proof?hash=${result.onChain.evidenceHash}`} className="text-indigo-300 hover:underline text-[10px]">→ 验证</Link>
                     </div>
                   )}
                 </div>

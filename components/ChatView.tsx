@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -55,16 +57,8 @@ export function ChatView({ projects, projectId }: { projects: Project[]; project
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-slate-800 bg-slate-900/60">
-        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-4">
-          <a href="/" className="text-slate-100 font-bold">TokenTruth</a>
-          <span className="text-slate-500 text-sm">·</span>
-          <span className="text-slate-300 text-sm">问得明白</span>
-        </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto px-4 py-6">
+    <div className="workspace-page">
+<main className="max-w-5xl mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold text-slate-100">问得明白</h1>
         <p className="text-slate-400 text-sm">投资者直接提问，AI 根据项目资料给出带来源、时间、可信度、原文、风险的回答。</p>
 
@@ -152,7 +146,7 @@ function AnswerCard({ a }: { a: any }) {
           <div className="text-indigo-300 font-semibold">链上存证</div>
           <div className="font-mono text-slate-500 text-[10px] break-all mt-1">tx: {a.onChain.txHash}</div>
           <div className="font-mono text-slate-500 text-[10px] break-all">hash: {a.onChain.evidenceHash}</div>
-          <a href={`/proof?hash=${a.onChain.evidenceHash}`} className="mt-1 inline-block text-indigo-300 hover:underline">→ 验证</a>
+          <Link href={`/proof?hash=${a.onChain.evidenceHash}`} className="mt-1 inline-block text-indigo-300 hover:underline">→ 验证</Link>
         </div>
       )}
     </div>

@@ -1,0 +1,17 @@
+{
+  "symbol": "PAXG",
+  "pair": "PAXG/USDT",
+  "snapshotDate": "2026-10-17",
+  "isDemo": true,
+  "isLive": false,
+  "currency": "USD",
+  "price": 4152.17,
+  "change24hPercent": 0.82,
+  "volume24h": 172531972,
+  "marketCap": 1829493806,
+  "circulatingSupply": 440620,
+  "totalSupply": 440620,
+  "source": "Repository PAXG seed snapshot (ad07a1a)",
+  "sourceUrl": "https://coinmarketcap.com/currencies/pax-gold/",
+  "note": "Static demonstration snapshot copied from repository seed data; not a live quote."
+}

@@ -1,0 +1,12 @@
+{
+  "id": "paxg",
+  "name": "Pax Gold",
+  "symbol": "PAXG",
+  "category": "rwa_commodity",
+  "network": "Ethereum",
+  "contractAddress": "0x45804880De22913dAFE09f4980848ECE6EcbAf78",
+  "underlyingAsset": "One fine troy ounce of London Good Delivery gold per PAXG",
+  "website": "https://www.paxos.com/pax-gold",
+  "source": "Repository PAXG seed data (ad07a1a)",
+  "isDemo": true
+}

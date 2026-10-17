@@ -1,0 +1,11 @@
+{
+  "isDemo": true,
+  "executesTrades": false,
+  "steps": [
+    { "id": "review", "title": "查看资产资料、静态行情与风险" },
+    { "id": "eligibility", "title": "由平台核验地区资格与 KYC 要求" },
+    { "id": "authorize", "title": "用户确认平台、金额及授权范围" },
+    { "id": "platform", "title": "前往支持 PAXG 的平台，由用户完成交易" }
+  ],
+  "note": "Demonstration flow only; this endpoint does not place orders or transfer assets."
+}

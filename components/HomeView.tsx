@@ -14,32 +14,8 @@ export function HomeView({
   contractAddress: string;
 }) {
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 font-bold text-slate-100">
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-md bg-gradient-to-br from-indigo-500 to-purple-500 text-white">
-              <i className="fa fa-shield" />
-            </span>
-            TokenTruth
-          </Link>
-          <nav className="hidden md:flex items-center gap-4 text-sm text-slate-400">
-            <Link href="/chat" className="hover:text-slate-100">问得明白</Link>
-            <Link href="/analyze" className="hover:text-slate-100">帮我分析</Link>
-            <Link href="/track" className="hover:text-slate-100">跟踪执行</Link>
-            <Link href="/company" className="hover:text-slate-100">项目方后台</Link>
-            <Link href="/proof" className="hover:text-slate-100">链上存证</Link>
-          </nav>
-          <div className="ml-auto flex items-center gap-3 text-xs">
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded bg-indigo-900/30 text-indigo-300 border border-indigo-800/40">
-              <i className="fa fa-circle text-[8px]" /> {chainMode}
-            </span>
-            <span className="hidden lg:inline text-slate-500 font-mono text-[10px]">{contractAddress?.slice(0, 14)}…</span>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 py-12">
+    <div className="workspace-page">
+<main className="max-w-7xl mx-auto px-4 py-12">
         <section className="text-center max-w-3xl mx-auto">
           <span className="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-indigo-900/30 text-indigo-300 border border-indigo-800/40">
             <i className="fa fa-shield" /> Monad Testnet · 可验证的 AI 知识库
@@ -92,14 +68,7 @@ export function HomeView({
           </div>
         </section>
       </main>
-
-      <footer className="border-t border-slate-800 mt-16 py-6 text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-2 justify-between">
-          <p>TokenTruth · 让投资者问得明白，让项目方讲得清楚 · 信息理解、证据追踪、风险解释、链上存证</p>
-          <p className="font-mono">contract={contractAddress}</p>
-        </div>
-      </footer>
-    </div>
+</div>
   );
 }
 

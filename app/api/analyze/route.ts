@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { analyzerService } from "@/modules/knowledge/analyzer.service";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   const projectId = req.nextUrl.searchParams.get("projectId");

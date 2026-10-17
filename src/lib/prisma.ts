@@ -9,7 +9,7 @@ loadEnv(); // fallback to .env
 
 // 兜底：Next.js dev 没读到 .env.local 时也保证有 DATABASE_URL
 if (!process.env.DATABASE_URL) {
-  process.env.DATABASE_URL = "file:./data/tokentruth.db";
+  process.env.DATABASE_URL = "file:../data/tokentruth.db";
 }
 
 import { PrismaClient } from "@prisma/client";

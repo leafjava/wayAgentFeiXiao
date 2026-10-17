@@ -7,6 +7,7 @@ import { hashCanonical } from "@/lib/hash";
 import { randomUUID } from "node:crypto";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 // GET /api/version/list?projectId=...&docType=...
 export async function GET(req: NextRequest) {

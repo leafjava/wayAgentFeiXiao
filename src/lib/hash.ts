@@ -7,7 +7,12 @@ export function sha256Hex(input: string | Buffer): string {
 }
 
 export function canonicalJson(obj: unknown): string {
-  return JSON.stringify(obj, Object.keys(obj as object).sort(), 0);
+  return JSON.stringify(obj, (_key, value) => {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      return Object.fromEntries(Object.keys(value).sort().map(key => [key, value[key]]));
+    }
+    return value;
+  });
 }
 
 export function hashCanonical(obj: unknown): string {

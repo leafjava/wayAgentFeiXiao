@@ -27,9 +27,9 @@ export class TrackingService {
     }
   }
 
-  // Plan (non-persisted mock; just returns summary)
+  // Plans use the same Prisma persistence as the other tracking records.
   async savePlan(projectId: string, plan: { budget: number; riskPreference: string; trackingFrequency: string; notes: string }) {
-    return {
+    return prisma.investmentPlan.create({ data: {
       planId: randomUUID(),
       projectId,
       budget: plan.budget,
@@ -37,7 +37,11 @@ export class TrackingService {
       trackingFrequency: plan.trackingFrequency,
       notes: plan.notes,
       createdAt: nowTs(),
-    };
+    } });
+  }
+
+  async listPlans(projectId?: string) {
+    return prisma.investmentPlan.findMany({ where: projectId ? { projectId } : undefined, orderBy: { createdAt: "desc" } });
   }
 
   // Consent + execution

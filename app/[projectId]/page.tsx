@@ -25,9 +25,9 @@ export default async function ProjectDetail({ params }: { params: { projectId: s
   const risk = await prisma.riskState.findUnique({ where: { projectId: params.projectId } });
 
   return (
-    <div className="min-h-screen">
+    <div className="workspace-page">
       <main className="max-w-7xl mx-auto px-4 py-6">
-        <Link href="/" className="text-xs text-slate-500 hover:text-slate-300">
+        <Link href="/projects" className="text-xs text-slate-500 hover:text-slate-300">
           ← 返回目录
         </Link>
         <div className="mt-2 flex items-start justify-between">

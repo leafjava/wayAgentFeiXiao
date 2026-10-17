@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { trackingService } from "@/modules/tracking/tracking.service";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   const projectId = req.nextUrl.searchParams.get("projectId") ?? undefined;

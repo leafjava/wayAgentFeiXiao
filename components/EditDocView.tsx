@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -38,16 +40,8 @@ export function EditDocView({ projects, projectId, docType }: { projects: Projec
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-slate-800 bg-slate-900/60">
-        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center gap-4">
-          <a href="/" className="text-slate-100 font-bold">TokenTruth</a>
-          <span className="text-slate-500 text-sm">·</span>
-          <span className="text-slate-300 text-sm">编辑资料</span>
-        </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 py-6">
+    <div className="workspace-page">
+<main className="max-w-4xl mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold text-slate-100">编辑资料 <span className="text-slate-500 text-base">→ 新版本上链</span></h1>
         <p className="text-slate-400 text-sm">修改后系统会自动与上一版本对比、生成新版本哈希、写入 Monad。</p>
 
@@ -76,7 +70,7 @@ export function EditDocView({ projects, projectId, docType }: { projects: Projec
             <div className="mt-2 font-mono text-slate-500 text-[10px] break-all">version: {result.version}</div>
             <div className="font-mono text-slate-500 text-[10px] break-all">hash: {result.contentHash}</div>
             <div className="font-mono text-slate-500 text-[10px] break-all">tx: {result.onChain?.txHash || "-"}</div>
-            <a href={`/proof?hash=${result.contentHash}`} className="mt-2 inline-block text-indigo-300 hover:underline">→ 在链上验证</a>
+            <Link href={`/proof?hash=${result.onChain?.evidenceHash || result.contentHash}`} className="mt-2 inline-block text-indigo-300 hover:underline">→ 在链上验证</Link>
           </div>
         )}
       </main>

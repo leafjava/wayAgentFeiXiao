@@ -1,7 +1,11 @@
-# TokenTruth2
+# TokenTruth2 · 动态前端适配版
 
 > **让投资者问得明白，让项目方讲得清楚** · Next.js 14 + Prisma + viem + DeepSeek
 > Monad Blitz V3 @上海 参赛项目（重做版）
+
+本版本以本仓库后端为基础，迁入 NEURAL 风格视频首页与业务页玻璃主题。站内导航采用 Next Router，背景播放器位于根布局，不随页面切换卸载。原 Python 版本作为独立备份保留。
+
+详见 [迁移说明与验证命令](docs/migration.md)。
 
 ---
 
@@ -15,10 +19,10 @@
 |---|---|
 | 框架 | **Next.js 14** App Router（前端 + API Route Handlers 一体） |
 | 语言 | **TypeScript 严格模式** |
-| ORM | **Prisma 5** + SQLite（dev）/ Postgres（prod） |
+| ORM | **Prisma 5** + SQLite；生产数据库需按部署环境配置 |
 | 链交互 | **viem 2**（替代 web3.py，更现代、TypeScript 原生） |
 | LLM | **DeepSeek**（OpenAI 兼容 SDK，可降级到本地引擎） |
-| UI | **React 18** + Tailwind CSS 3 + Inter / JetBrains Mono |
+| UI | **React 18** + Tailwind CSS 3 + Sora 可变字体 + 视频背景 |
 | 状态 | React `useState` + URL search params（无外部 store 依赖） |
 | 链上合约 | **Solidity 0.8.20** + 自带 solc-js 编译 |
 | 测试 | **vitest 2** |
@@ -40,9 +44,9 @@ INVESTOR_QA / CONTENT_PUBLISH / EXECUTION_CONSENT
 ## 快速开始
 
 ```bash
-cd D:\webProject\HacksonProjectList\TokenTruth2
-npm install
-npm run db:push       # 初始化 SQLite
+cd wayAgentFeiXiao
+npm ci
+npm run setup         # 初始化 SQLite 并写入演示资料
 npm run dev           # http://localhost:4000
 ```
 
@@ -50,7 +54,9 @@ npm run dev           # http://localhost:4000
 
 | 路径 | 作用 |
 |---|---|
-| `/` | 项目目录 + 4 大模块入口 |
+| `/` | 全屏动态首页 |
+| `/projects` | 项目目录 + 4 大模块入口 |
+| `/project/demo-mon` | 项目资料详情 |
 | `/chat?projectId=demo-mon` | 投资者问答：靠什么赚钱？ |
 | `/analyze?projectId=demo-equityx` | RWA 项目综合分析 |
 | `/track` | 关注 + 投资计划 + 帮客户买代币 |
@@ -61,10 +67,14 @@ npm run dev           # http://localhost:4000
 ## 测试
 
 ```bash
-npm test               # 单元 + 集成测试
+DATABASE_URL=file:../data/test.db npm run db:push
+DATABASE_URL=file:../data/test.db TOKENTRUTH_CHAIN_MODE=mock npm test
 npm run check          # tsc --noEmit 类型检查
-npm run demo           # 端到端 smoke（启动服务器跑 9 步）
+npm run build
+TOKENTRUTH_DEMO_URL=http://127.0.0.1:4000 npm run demo # 对已启动的 mock 服务验证
 ```
+
+测试会重建演示数据，必须使用独立测试数据库。mock 链账本在重启时清空，SQLite 业务数据仍保留。
 
 ## 部署到 Monad Testnet
 
@@ -92,7 +102,7 @@ npm run chain:deploy
 ### 3. 启动应用
 
 ```bash
-$env:DISCLOSURE_REGISTRY_ADDRESS = "0x..."
+export DISCLOSURE_REGISTRY_ADDRESS="0x..."
 npm run dev    # 或 npm run build && npm start
 ```
 
@@ -110,7 +120,7 @@ npm run dev    # 或 npm run build && npm start
 | `DEEPSEEK_API_KEY` | ❌ | 留空降级到本地引擎 |
 | `DEEPSEEK_BASE_URL` | ❌ | 默认 `https://api.deepseek.com/v1` |
 | `DEEPSEEK_MODEL` | ❌ | 默认 `deepseek-chat` |
-| `DATABASE_URL` | ❌ | 默认 `file:./data/tokentruth.db` |
+| `DATABASE_URL` | ❌ | 默认 `file:../data/tokentruth.db` |
 
 ## 目录结构
 
@@ -145,7 +155,7 @@ TokenTruth2/
 │       ├── risk/risk.service.ts
 │       └── seed/{seed.data,seed}.ts
 ├── prisma/
-│   ├── schema.prisma                    # 8 张表
+│   ├── schema.prisma                    # 9 张表（含持久化投资计划）
 │   └── seed.ts
 ├── contracts/
 │   ├── DisclosureRegistry.sol          # Solidity 0.8.20

@@ -22,7 +22,7 @@ const EnvSchema = z.object({
   DEEPSEEK_MODEL: z.string().default("deepseek-chat"),
   DEEPSEEK_TIMEOUT: z.coerce.number().int().default(20),
   PORT: z.coerce.number().int().default(4000),
-  DATABASE_URL: z.string().default("file:./data/tokentruth.db"),
+  DATABASE_URL: z.string().default("file:../data/tokentruth.db"),
 });
 
 const raw = {

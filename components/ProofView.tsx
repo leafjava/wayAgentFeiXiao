@@ -28,16 +28,8 @@ export function ProofView({ initialHash }: { initialHash: string }) {
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-slate-800 bg-slate-900/60">
-        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center gap-4">
-          <a href="/" className="text-slate-100 font-bold">TokenTruth</a>
-          <span className="text-slate-500 text-sm">·</span>
-          <span className="text-slate-300 text-sm">链上存证</span>
-        </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 py-8">
+    <div className="workspace-page">
+<main className="max-w-4xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold text-slate-100">链上存证查询</h1>
         <p className="text-slate-400 text-sm">输入 evidenceHash 验证存证、查看链上元数据 + Explorer 跳转。</p>
 

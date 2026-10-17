@@ -3,6 +3,7 @@ import { trackingService } from "@/modules/tracking/tracking.service";
 import { projectsService } from "@/modules/projects/projects.service";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {

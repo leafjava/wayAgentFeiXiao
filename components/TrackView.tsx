@@ -30,6 +30,10 @@ export function TrackView() {
   useEffect(() => { load(); }, []);
 
   const isRwa = projectId === "demo-equityx";
+  useEffect(() => {
+    const eligible = platforms.filter(p => isRwa ? p.category === "rwa" : p.category !== "rwa");
+    if (eligible.length && !eligible.some(p => p.id === platform)) setPlatform(eligible[0].id);
+  }, [isRwa, platforms, platform]);
 
   async function buy() {
     if (!amount) { alert("请输入数量"); return; }
@@ -54,16 +58,8 @@ export function TrackView() {
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b border-slate-800 bg-slate-900/60">
-        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center gap-4">
-          <a href="/" className="text-slate-100 font-bold">TokenTruth</a>
-          <span className="text-slate-500 text-sm">·</span>
-          <span className="text-slate-300 text-sm">跟踪执行</span>
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 py-6">
+    <div className="workspace-page">
+<main className="max-w-7xl mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold text-slate-100">跟踪与执行</h1>
         <p className="text-slate-400 text-sm">辅助制定投资计划，跟踪价格和公司动态；用户授权后对接平台执行。</p>
 
@@ -89,11 +85,11 @@ export function TrackView() {
             <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
               <input id="ppid" placeholder="projectId" defaultValue={projectId} className="col-span-2 bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100" />
               <input id="pbudget" placeholder="预算" className="bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100" />
-              <select id="prisk" className="bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100">
-                <option value="conservative">保守</option><option value="balanced" selected>平衡</option><option value="aggressive">激进</option>
+              <select defaultValue="balanced" id="prisk" className="bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100">
+                <option value="conservative">保守</option><option value="balanced">平衡</option><option value="aggressive">激进</option>
               </select>
-              <select id="pfreq" className="col-span-2 bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100">
-                <option value="daily">每日</option><option value="weekly" selected>每周</option><option value="on_event">事件触发</option>
+              <select defaultValue="weekly" id="pfreq" className="col-span-2 bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100">
+                <option value="daily">每日</option><option value="weekly">每周</option><option value="on_event">事件触发</option>
               </select>
               <textarea id="pnotes" placeholder="备注" rows={2} className="col-span-2 bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100"></textarea>
             </div>

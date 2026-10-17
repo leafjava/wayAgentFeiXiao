@@ -2,12 +2,12 @@
 
 import { seedAll } from "./seed.data";
 
+const seedState = globalThis as unknown as { tokenTruthSeeding?: Promise<unknown> };
 export async function ensureSeed() {
-  try {
-    await seedAll();
-  } catch (e) {
-    console.warn("[seed] failed:", (e as Error).message);
+  if (!seedState.tokenTruthSeeding) {
+    seedState.tokenTruthSeeding = seedAll().finally(() => { seedState.tokenTruthSeeding = undefined; });
   }
+  await seedState.tokenTruthSeeding;
 }
 
 /** Force re-seed (for tests). Wipes all data first. */

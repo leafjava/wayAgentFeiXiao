@@ -11,11 +11,12 @@ describe("Seed + Projects", () => {
   beforeAll(async () => {
     await resetAndSeed();
   });
-  it("seeds 2 projects", async () => {
+  it("seeds the demo projects and PAXG", async () => {
     const ps = await projectsService.list();
     expect(ps.length).toBeGreaterThanOrEqual(2);
     expect(ps.find((p) => p.id === "demo-mon")).toBeDefined();
     expect(ps.find((p) => p.id === "demo-equityx")).toBeDefined();
+    expect(ps.find((p) => p.id === "paxg")?.category).toBe("rwa_commodity");
   });
   it("seeds docs and versions", async () => {
     const docs = await prisma.document.count();

@@ -82,7 +82,7 @@ export const EVIDENCE_TYPE: Record<string, EvidenceTypeNum> = {
   PROJECT_DISCLOSURE: 0,
   RESEARCH_REPORT: 1,
   RISK_STATUS_CHANGE: 2,
-  INVETOR_QA: 3,
+  INVESTOR_QA: 3,
   CONTENT_PUBLISH: 4,
   EXECUTION_CONSENT: 5,
 } as Record<string, EvidenceTypeNum>;
@@ -283,7 +283,9 @@ export type RecordEvidenceInput = {
   toStatus: Hex;
 };
 
-const mock = new MockRegistry();
+const mockState = globalThis as unknown as { tokenTruthMockRegistry?: MockRegistry };
+const mock = mockState.tokenTruthMockRegistry ?? new MockRegistry();
+mockState.tokenTruthMockRegistry = mock;
 const live = isLive ? new LiveRegistry() : null;
 
 export const chain = live ?? mock;

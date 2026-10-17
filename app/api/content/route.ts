@@ -4,6 +4,7 @@ import { generate as genContent } from "@/modules/company/content.service";
 import { chainService } from "@/modules/chain/chain.service";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
