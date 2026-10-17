@@ -1,0 +1,170 @@
+// TokenTruth Prisma schema · SQLite + Prisma 5.x
+// 8 张表：Project + Document + Version + RWA + Risk + Watchlist + Consent + Execution
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// =====================================================================
+// Project + Document + Version
+// =====================================================================
+
+model Project {
+  id          String   @id // projectId
+  name        String
+  symbol      String
+  sector      String?
+  description String?
+  website     String?
+  whitepaper  String?
+  // crypto | rwa_stock | rwa_bond | rwa_fund | other
+  category    String   @default("crypto")
+  rwaInfoJson String?  @default("{}")
+  createdAt   Int
+
+  documents   Document[]
+  versions    Version[]
+  riskState   RiskState?
+  rwaRecord   RwaRecord?
+  watchlist   WatchlistItem[]
+  consents    Consent[]
+  executions  ExecutionRecord[]
+
+  @@map("projects")
+}
+
+model Document {
+  id          String  @id // uuid
+  projectId   String
+  docType     String  // whitepaper | tokenomics | unlock | announcement | news | community | nav_audit
+  title       String
+  content     String
+  source      String?
+  sourceUrl   String?
+  trustLevel  String  @default("official") // official | market | news | community | ai
+  createdAt   Int
+
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, docType])
+  @@map("documents")
+}
+
+model Version {
+  id            String  @id
+  projectId     String
+  docType       String
+  version       String
+  contentHash   String
+  content       String
+  parentVersion String?
+  changesJson   String?  @default("{}")
+  createdAt     Int
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, docType, createdAt])
+  @@map("versions")
+}
+
+// =====================================================================
+// RWA Records (股票代币化专属)
+// =====================================================================
+
+model RwaRecord {
+  projectId             String  @id
+  underlyingAsset       String
+  custodian             String?
+  regulator             String?
+  regulatoryFramework   String?
+  redemptionPeriodDays  Int?
+  minimumRedemption     String?
+  dividendFrequency     String?
+  auditFirm             String?
+  lastAuditDate         String?
+  navReportUrl          String?
+  kycRequired           Boolean @default(true)
+  accreditedOnly        Boolean @default(false)
+  extraJson             String? @default("{}")
+  updatedAt             Int
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@map("rwa_records")
+}
+
+// =====================================================================
+// Risk State
+// =====================================================================
+
+model RiskState {
+  projectId    String @id
+  status       String // HEALTHY | NEEDS_REVIEW | HIGH_RISK
+  score        Float
+  factorsJson  String
+  updatedAt    Int
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@map("risk_states")
+}
+
+// =====================================================================
+// Watchlist + Consent + Execution
+// =====================================================================
+
+model WatchlistItem {
+  id         String  @id // uuid
+  projectId  String
+  note       String?
+  budget     Float   @default(0)
+  createdAt  Int
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@map("watchlist")
+}
+
+model Consent {
+  consentId     String  @id
+  projectId     String
+  platform      String
+  actionType    String
+  userLabel     String?
+  amount        String?
+  evidenceHash  String?
+  txHash        String?
+  blockNumber   Int?
+  chainStatus   String  @default("pending")
+  createdAt     Int
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  executions ExecutionRecord[]
+
+  @@index([projectId, createdAt])
+  @@map("consents")
+}
+
+model ExecutionRecord {
+  id             String   @id
+  consentId      String
+  projectId      String
+  platform       String
+  actionType     String
+  amount         String?
+  userLabel      String?
+  evidenceHash   String?
+  txHash         String?
+  blockExplorer  String?
+  status         String
+  executedAt     Int?
+  createdAt      Int
+
+  consent Consent @relation(fields: [consentId], references: [consentId], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt])
+  @@map("execution_records")
+}

@@ -1,0 +1,47 @@
+{
+  "name": "tokentruth",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TokenTruth · Next.js 14 single-app + Prisma + viem + DeepSeek for Monad hackathon",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p 4000",
+    "lint": "next lint",
+    "db:push": "prisma db push --skip-generate",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "contract:compile": "node contracts/compile.mjs",
+    "chain:deploy": "tsx scripts/deploy.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "demo": "tsx scripts/demo.ts",
+    "check": "tsc --noEmit"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "5.22.0",
+    "clsx": "2.1.1",
+    "next": "14.2.35",
+    "openai": "4.67.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "viem": "2.21.25",
+    "zod": "3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "20.16.11",
+    "@types/react": "18.3.11",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "10.4.20",
+    "dotenv": "16.4.5",
+    "postcss": "8.4.47",
+    "prisma": "5.22.0",
+    "tailwindcss": "3.4.13",
+    "tsx": "4.19.1",
+    "typescript": "^5.6.2",
+    "vitest": "2.1.2"
+  }
+}

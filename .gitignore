@@ -1,0 +1,43 @@
+node_modules/
+.next/
+out/
+.vercel/
+dist/
+build/
+coverage/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data
+data/
+.cache/
+.turbo/
+.parcel-cache/
+
+# Solidity
+artifacts/
+cache/
+typechain-types/
+.openzeppelin/
+
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
+# Editors
+.idea/
+.vscode/
+*.swp
