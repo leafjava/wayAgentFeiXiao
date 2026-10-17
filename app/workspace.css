@@ -34,3 +34,4 @@
 .workspace-page>main{width:100%}
 .workspace .grid-cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(min-width:768px){.workspace .grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.workspace-brand .fxh-logo{width:23px;height:17px;object-fit:contain}

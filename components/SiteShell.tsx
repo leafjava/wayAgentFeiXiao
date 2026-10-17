@@ -21,7 +21,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     <div className="workspace-art" aria-hidden="true" />
     <header className="workspace-bar">
       <Link href="/" className="workspace-brand" aria-label="TokenTruth 首页">
-        <svg viewBox="0 0 23 17" aria-hidden="true"><path d="M8.15 .9 H4.55 L.5 9.3 H4.1 Z"/><path d="M17 0 H13.4 L6.15 16.4 H9.75 Z"/><path d="M22.9 0 H19.3 L15 7.6 H18.6 Z"/><path d="M22.6 6.9 H19 L14.05 16.4 H17.65 Z"/></svg>
+        <img className="fxh-logo" src="/assets/img/FXH_logo.png" alt="" />
         <span>TokenTruth</span>
       </Link>
       <input className="workspace-toggle" id="workspace-nav" type="checkbox" checked={open} onChange={e => setOpen(e.target.checked)} aria-label="打开或关闭导航菜单" aria-controls="workspace-navigation" />
