@@ -1,5 +1,13 @@
 /** TokenTruth env validation (typed access, fails fast). */
 
+// IMPORTANT: side-effect import runs FIRST so .env.local is loaded
+// before any other module (incl. Prisma) reads process.env.
+import "dotenv/config";
+import { config as loadEnv } from "dotenv";
+import { join } from "node:path";
+loadEnv({ path: join(process.cwd(), ".env.local") });
+loadEnv(); // fallback to .env
+
 import { z } from "zod";
 
 const EnvSchema = z.object({
