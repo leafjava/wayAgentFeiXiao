@@ -10,6 +10,13 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   const [chain, setChain] = useState<{ mode?: string; contractAddress?: string }>({});
+  const [wallet, setWallet] = useState<string>("");
+  async function connectWallet() {
+    const ethereum = (window as any).ethereum;
+    if (!ethereum) return alert("请安装 MetaMask 或兼容 EVM 钱包");
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    setWallet(accounts?.[0] || "");
+  }
   useEffect(() => { setOpen(false); }, [path]);
   useEffect(() => {
     const abort = new AbortController();
@@ -30,7 +37,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <nav id="workspace-navigation" aria-label="主导航">
         {links.map(([href, label]) => <Link key={href} href={href} onClick={() => setOpen(false)} aria-current={path === href ? "page" : undefined}>{label}</Link>)}
       </nav>
-      <div className="workspace-status"><span>{chain.mode || "Monad Testnet"}</span></div>
+      <div className="workspace-status"><span>{chain.mode || "Monad Testnet"}</span><button onClick={connectWallet} className="ml-3 rounded border border-slate-700 px-2 py-1 text-[10px] text-slate-300 hover:border-emerald-500">{wallet ? `${wallet.slice(0, 6)}...${wallet.slice(-4)}` : "连接钱包"}</button></div>
     </header>
     <div className="workspace-main">{children}</div>
     <footer className="workspace-footer"><p>TokenTruth · 让信任，建立在可验证的事实之上。</p><p className="font-mono">{chain.contractAddress ? `contract=${chain.contractAddress}` : "Monad Testnet"}</p></footer>

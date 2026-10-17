@@ -24,8 +24,18 @@ export function TrackView() {
     try {
       const client = createWalletClient({ transport: custom(ethereum) });
       const [account] = await client.requestAddresses();
-      const chainId = await ethereum.request({ method: "eth_chainId" });
-      if (Number.parseInt(chainId, 16) !== 10143) return setChainBuy({ error: "请先切换到 Monad Testnet（Chain ID 10143）" });
+      let chainId = await ethereum.request({ method: "eth_chainId" });
+      if (Number.parseInt(String(chainId), 16) !== 10143) {
+        try {
+          await ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: "0x279f" }] });
+        } catch (switchError: any) {
+          if (switchError?.code === 4902) {
+            await ethereum.request({ method: "wallet_addEthereumChain", params: [{ chainId: "0x279f", chainName: "Monad Testnet", nativeCurrency: { name: "MON", symbol: "MON", decimals: 18 }, rpcUrls: ["https://testnet-rpc.monad.xyz"], blockExplorerUrls: ["https://testnet.monadexplorer.com"] }] });
+          } else throw switchError;
+        }
+        chainId = await ethereum.request({ method: "eth_chainId" });
+      }
+      if (Number.parseInt(String(chainId), 16) !== 10143) return setChainBuy({ error: "钱包仍未切换到 Monad Testnet（Chain ID 10143）" });
       const hash = await client.writeContract({ chain: null, address: address as `0x${string}`, abi: [{ name: "purchase", type: "function", stateMutability: "payable", inputs: [{ name: "projectId", type: "string" }, { name: "asset", type: "string" }], outputs: [{ name: "orderId", type: "bytes32" }] }], functionName: "purchase", args: [projectId, projectId === "paxg" ? "PAXG" : "DEMO"], value: parseEther("0.01"), account });
       setChainBuy({ hash, account, explorer: `https://testnet.monadexplorer.com/tx/${hash}` });
     } catch (e: any) { setChainBuy({ error: e?.shortMessage || e?.message || String(e) }); }
@@ -144,8 +154,7 @@ export function TrackView() {
                 .map((p) => <option key={p.id} value={p.id}>{p.name}{p.requiresKyc ? " 🔒KYC" : ""}</option>)}
             </select>
             <input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="数量 (如 100 EQX)" className="bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-slate-100" />
-            <button onClick={buy} className="px-3 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white">授权并跳转</button>
-            <button onClick={buyOnChain} className="px-3 py-1.5 rounded bg-violet-600 hover:bg-violet-500 text-white">支付 0.01 MON 并记录</button>
+            <button onClick={buyOnChain} className="col-span-2 px-3 py-1.5 rounded bg-violet-600 hover:bg-violet-500 text-white">连接钱包并支付 0.01 MON（Monad Testnet）</button>
           </div>
           {buyResult && (
             <div className="mt-3 bg-emerald-900/20 border border-emerald-800/40 rounded p-3 text-xs">
