@@ -26,7 +26,12 @@ export const BackgroundVideo = memo(function BackgroundVideo() {
     let finishTimer: ReturnType<typeof setTimeout> | undefined;
     let loops = 0;
     const pending = new Set<HTMLVideoElement>();
-    const instance = background.dataset.playerInstance || crypto.randomUUID();
+    // randomUUID is only exposed in secure browser contexts (HTTPS/localhost).
+    // The Tencent Cloud site may be reached over plain HTTP, so keep a safe fallback.
+    const uuid = typeof globalThis.crypto?.randomUUID === "function"
+      ? globalThis.crypto.randomUUID()
+      : `player-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const instance = background.dataset.playerInstance || uuid;
     background.dataset.playerInstance = instance;
     background.dataset.loopCount = "0";
     players.forEach((video, index) => {
